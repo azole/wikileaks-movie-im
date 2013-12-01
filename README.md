@@ -12,3 +12,6 @@ There is a geek message tool in the movie WikiLeaks and every engineer loves tha
 4. enter you id and login
 
 5. start to conversation
+
+
+reference: http://cssdeck.com/labs/pure-css-osx-terminal
