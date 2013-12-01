@@ -1,0 +1,61 @@
+body {
+
+}
+#display {
+    font-family: Andale Mono, monospace;  
+    font-size:12px;
+    height:200px;
+    background:#000;
+    width: 500px;
+    margin: 0px;
+    overflow: scroll;
+    border: 1px solid black;
+}
+#display p { 
+   color: #63de00; 
+   line-height: 12px;
+   margin: 5px 0;
+}
+#display .system { 
+   color: #ffffff; 
+   line-height: 12px;
+   margin: 5px 0;
+}
+#msg {
+  font-size:12px;
+  width: 500px;
+  background:#000;
+  color: #63de00; 
+  margin: 0px;
+  border: solid 1px black;
+  padding: 0px;
+}
+
+@keyframes blink
+{
+  0%   {  background:rgba(99,222,0,100);  }
+  100% {  background:rgba(99,222,0,0);  }
+}
+
+@-webkit-keyframes blink {
+  0%   {  background:rgba(99,222,0,100);  }
+  100% {  background:rgba(99,222,0,0);  }
+}
+@-moz-keyframes blink {
+  0%   {  background:rgba(99,222,0,100);  }
+  100% {  background:rgba(99,222,0,0);  }
+}
+.cursor {
+  background:#63de00; 
+  width:11px;
+  height:12px;
+  margin-bottom:-3px;
+}
+#body:hover .cursor {
+    -webkit-animation-name: blink;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-name: blink;
+    -moz-animation-duration: 1s;
+    -moz-animation-iteration-count: infinite;
+}

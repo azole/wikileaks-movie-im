@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>client</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <div id="body">
+          <label for="userId">ID:</label><input id="userId"></input><button id="btnConnect">connect</button>
+          <button id="btnDisconnect">Disconnect</button>
+          <br><span>上線清單：</span>
+          <div id="list" style="border:1px solid black;width:500px"></div>
+          <div id="display"></div>
+          <input id="msg"></input>
+          
+        </div>
+        <script src="socket.io.js"></script>
+        <script>
+          var PORT = 1234;
+          var IP = '127.0.0.1'; // 如果要跨機器測試，記得改IP
+
+          var display= document.getElementById('display');
+
+          var socket = null;
+          var userId = '';
+
+          var msgInput = document.getElementById('msg');
+          var userIdInput = document.getElementById('userId');
+
+          msgInput.readOnly = true;
+
+          document.getElementById('btnConnect').onclick = function(){
+
+            if(socket!==null)
+              return;
+
+            socket = io.connect('http://' + IP +':' + PORT);
+            userId = userIdInput.value;
+            console.log('login:', userId);
+            if(userId.length<=0){
+              showSystemMsg('You have to input your id.');
+            } else {
+              socket.emit('login', {userId: userId});
+              userIdInput.readOnly = true;
+              msgInput.readOnly = false;
+              msgInput.focus();
+            }
+
+            socket.on('chat', function(data){
+              showMsg(data.from, data.msg);
+            });
+            
+            socket.on('system', function(data){
+              showSystemMsg(data.msg);
+            });
+            var list = document.getElementById('list');
+            socket.on('list', function(data){
+              list.innerHTML = data.list;
+            });
+            return false;
+          };
+
+          document.getElementById('btnDisconnect').onclick = function(){
+            socket.emit('disconnectByUser');
+            userIdInput.readOnly = false;
+            msgInput.readOnly = true;
+            return false;
+          };
+
+          function send() {
+            var msg = msgInput.value;
+            if(msg.length>0){
+              socket.emit('send', {msg: msg});
+            }
+            showMsg(userId, msg);
+            msgInput.value = "";
+            msgInput.focus();
+          }
+
+          function showMsg(from, msg){
+            display.innerHTML = display.innerHTML + '<p>(' +from+') ' + msg + '</p>';
+            display.scrollTop = display.scrollHeight;
+          }
+
+          function showSystemMsg(msg) {
+            display.innerHTML = display.innerHTML + '<p class="system">' + msg + '</p>';
+          }
+
+          msgInput.onkeydown = function (event) {
+            if (event.keyCode == 13) {
+              send();
+            }
+          };
+        </script>
+
+    </body>
+</html>
